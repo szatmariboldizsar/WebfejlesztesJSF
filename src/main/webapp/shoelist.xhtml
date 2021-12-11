@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags">
+<ui:composition template="layout.xhtml">
+	<ui:define name="content">
+		<h:form id="shoeForm">
+			<p:panel header="Add new Shoe" id="shoeAddPnl">
+				<h:panelGrid columns="2">
+					<p:outputLabel for="brand" value="Brand: " />
+					<p:inputText id="brand" size="20"
+								 value="#{shoeController.shoeDTO.shoeBrand}" required="true"
+								 requiredMessage="Please enter the shoe's brand!" />
+					<p:outputLabel for="shoemodel" value="Model: " />
+					<p:inputText id="shoemodel" size="20"
+						value="#{shoeController.shoeDTO.shoeModel}" required="true"
+									 requiredMessage="Please enter the shoe's model!"/>
+					<p:outputLabel for="shoecolorway" value="Colorway: " />
+					<p:inputText id="shoecolorway" size="20"
+						value="#{shoeController.shoeDTO.shoeColorway}" />
+					<p:outputLabel for="shoesize" value="Size (10-69): " />
+					<p:inputText id="shoesize" size="1"
+						value="#{shoeController.shoeDTO.shoeSize}" required="true"
+									 requiredMessage="Please enter the shoe's size!">
+					<f:validator validatorId="customSizeValidator" />
+					</p:inputText>
+					<h:commandButton value="#{shoeController.actionLabel}"
+						action="#{shoeController.saveShoe}">
+						<f:ajax execute="shoeForm" render="shoeList shoeAddPnl" />
+					</h:commandButton>
+				</h:panelGrid>
+			</p:panel>
+			<p:panel header="Shoe List" id="shoelist">
+				<p:dataTable id="table" var="shoe"
+					value="#{shoeController.shoeDTOList}">
+					<p:column>
+						<f:facet name="header">Shoe ID</f:facet>
+						<h:outputText value="#{shoe.shoeId}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Brand</f:facet>
+						<h:outputText value="#{shoe.shoeBrand}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Model</f:facet>
+						<h:outputText value="#{shoe.shoeModel}">
+						</h:outputText>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Colorway</f:facet>
+						<h:outputText value="#{shoe.shoeColorway}">
+						</h:outputText>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Size</f:facet>
+						<h:outputText value="#{shoe.shoeSize}">
+						</h:outputText>
+					</p:column>
+					<p:column id="action">
+						<f:facet name="header">Action</f:facet>
+						<h:commandButton action="#{shoeController.editShoe(shoe)}" image="/images/edit_icon.png" style="width:6%;height:6%">
+							<f:ajax execute="action" render="shoeForm"/>
+						</h:commandButton>
+						<h:commandButton action="#{shoeController.editShoe(shoe)}" image="/images/delete_icon.png" style="width:6%;height:6%">
+							<f:ajax execute="action" render="table" />
+						</h:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
